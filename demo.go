@@ -99,17 +99,13 @@ func main() {
 	//删除
 	v1.Delete("/todo/:id", func(c *fiber.Ctx) error {
 		id := c.Params("id")
-		if err = DB.Where("id=?", id).Delete(Todo{}).Error; err != nil {
-			return c.JSON(fiber.Map{
-				"code": 2003,
-				"msg":  "don't search todo message by id",
-			})
-		} else {
+		if err = DB.Where("id=?", id).Delete(Todo{}).Error; err == nil {
 			return c.JSON(fiber.Map{
 				"code": 2000,
 				"msg":  "delete todo massage success ",
 			})
 		}
+		return err
 	})
 	app.Listen(":3000")
 }
